@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "goblog",
   "sdk": "go",
   "dependencies": [
     {
