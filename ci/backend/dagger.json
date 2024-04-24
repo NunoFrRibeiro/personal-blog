@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "sdk": "go",
+  "dependencies": [
+    {
+      "name": "golang",
+      "source": "github.com/kpenfound/dagger-modules/golang@44564d6443a919a2c3f1dd7ad02fc22b5fb9db8c"
+    }
+  ],
+  "source": ".",
+  "engineVersion": "v0.11.1"
+}
