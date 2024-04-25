@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	app "github.com/NunoFrRibeiro/personal-go-blog/cmd"
-	"github.com/NunoFrRibeiro/personal-go-blog/pkg/logger"
+	app "github.com/NunoFrRibeiro/personal-blog/cmd"
+	"github.com/NunoFrRibeiro/personal-blog/pkg/logger"
 )
 
 func main() {

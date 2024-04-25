@@ -4,7 +4,7 @@
 
 ### Backend 
 
-Web server that listens on port 8080 and parses posts written in Markdown to generate the posts 
+Web server that listens on port 8080 and parses posts written in Markdown to generate date fed to the templates. 
 
 ### Frontend
 
