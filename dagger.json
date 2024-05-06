@@ -3,12 +3,28 @@
   "sdk": "go",
   "dependencies": [
     {
+      "name": "netlify",
+      "source": "github.com/kpenfound/dagger-modules/netlify@64555d157c8db0914fa7da49de419a397c7f42a1"
+    },
+    {
       "name": "backend",
       "source": "ci/backend"
     },
     {
+      "name": "github-release",
+      "source": "github.com/kpenfound/jpadams-github-release@c6081b3210407d5ea49fce8874c5104afa8373cb"
+    },
+    {
       "name": "golang",
       "source": "github.com/kpenfound/dagger-modules/golang@44564d6443a919a2c3f1dd7ad02fc22b5fb9db8c"
+    },
+    {
+      "name": "infisical",
+      "source": "github.com/jpadams/daggerverse/infisical@2588936e041960999462b469ce7b8ef5504fc2eb"
+    },
+    {
+      "name": "proxy",
+      "source": "github.com/kpenfound/dagger-modules/proxy@33bc3eef07555d9fd4c22b02ff5c008a71a649e7"
     }
   ],
   "source": "ci",
