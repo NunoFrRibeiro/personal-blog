@@ -30,6 +30,18 @@ func (b *Backend) RunUnitTests(
 ) (string, error) {
 	return dag.Golang().
 		WithProject(dir).
+		Test(ctx)
+}
+
+// Lint the project
+func (b *Backend) Lint(
+	ctx context.Context,
+	// Point to the host directory where the project is located
+	// +required
+	dir *Directory,
+) (string, error) {
+	return dag.Golang().
+		WithProject(dir).
 		GolangciLint(ctx)
 }
 

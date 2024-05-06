@@ -16,22 +16,43 @@ package main
 
 import (
 	"context"
-	"fmt"
 )
 
 var (
-  APP = "go-blog"
-  GH_REPO = "https://github.com/NunoFrRibeiro/personal-go-blog"
-  IMAGE = "nunofilribeiro/go-blog:tagname"
+	APP     = "go-blog"
+	GH_REPO = "https://github.com/NunoFrRibeiro/personal-go-blog"
+	IMAGE   = "nunofilribeiro/go-blog:tagname"
 )
+
 type Goblog struct{}
 
 // Run unit tests on the Project
 func (g *Goblog) RunUnitTests(
-  ctx context.Context,
+	ctx context.Context,
 	// Point to the host directory where the project is located
 	// +required
 	dir *Directory,
 ) (string, error) {
-  return fmt.Sprintf("Hola"), nil
+
+	result, err := dag.Backend().RunUnitTests(ctx, dir)
+	if err != nil {
+		return "", err
+	}
+
+	return result, nil
+}
+
+func (g *Goblog) Lint(
+	ctx context.Context,
+	// Point to the host directory where the project is located
+	// +required
+	dir *Directory,
+) (string, error) {
+
+	result, err := dag.Backend().Lint(ctx, dir)
+	if err != nil {
+		return "", err
+	}
+
+	return result, nil
 }
