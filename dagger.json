@@ -3,10 +3,6 @@
   "sdk": "go",
   "dependencies": [
     {
-      "name": "netlify",
-      "source": "github.com/kpenfound/dagger-modules/netlify@64555d157c8db0914fa7da49de419a397c7f42a1"
-    },
-    {
       "name": "backend",
       "source": "ci/backend"
     },
@@ -23,10 +19,14 @@
       "source": "github.com/jpadams/daggerverse/infisical@2588936e041960999462b469ce7b8ef5504fc2eb"
     },
     {
+      "name": "netlify",
+      "source": "github.com/kpenfound/dagger-modules/netlify@64555d157c8db0914fa7da49de419a397c7f42a1"
+    },
+    {
       "name": "proxy",
       "source": "github.com/kpenfound/dagger-modules/proxy@33bc3eef07555d9fd4c22b02ff5c008a71a649e7"
     }
   ],
   "source": "ci",
-  "engineVersion": "v0.11.1"
+  "engineVersion": "v0.11.8"
 }
