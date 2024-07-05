@@ -6,7 +6,7 @@ Description: Your cool strap line
 MetaPropertyTitle: Some title
 MetaDescription: Another desc
 MetaPropertyDescription: And another
-MetaOgURL: https://example.com/my-first-blog-post
+MetaOgURL: https://www.example.com/my-first-blog-post
 ---
 ## This is your first blog post!
 

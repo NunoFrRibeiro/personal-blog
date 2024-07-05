@@ -29,7 +29,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Errorf("filePath abs read error: %v", err)
 	}
-	indexPath := "templates/index.html"
+	indexPath := "posts/index.md"
 	path := filepath.Join(pwd, indexPath)
 	indexContent, err := os.ReadFile(path)
 	if err != nil {
