@@ -25,5 +25,3 @@ type Category struct {
 	Pages []BlogPost
 	Order int
 }
-
-var BaseURL = "http://localhost:8080"
