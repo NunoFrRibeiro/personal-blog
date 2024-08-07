@@ -3,7 +3,7 @@ package errors
 import "net/http"
 
 type AppError struct {
-	Code    int    `json:",omitempy"`
+	Code    int    `json:",omitempty"`
 	Message string `json:"message"`
 }
 

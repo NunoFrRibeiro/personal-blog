@@ -1,0 +1,20 @@
+app = 'personal-blog-nfribeiro'
+primary_region = 'mad'
+
+[build]
+  [build.args]
+    GO_VERSION = '1.21'
+
+[env]
+  PORT = '8081'
+
+[http_service]
+  internal_port = 8081
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'

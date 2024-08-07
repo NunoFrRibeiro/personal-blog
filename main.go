@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
-
 	app "github.com/NunoFrRibeiro/personal-blog/cmd"
 	"github.com/NunoFrRibeiro/personal-blog/pkg/logger"
 )
 
 func main() {
-	logger.Infof(fmt.Sprintf("starting server"))
+	logger.Infof("starting server")
 	app.Start()
 }

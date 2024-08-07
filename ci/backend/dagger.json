@@ -4,9 +4,9 @@
   "dependencies": [
     {
       "name": "golang",
-      "source": "github.com/kpenfound/dagger-modules/golang@44564d6443a919a2c3f1dd7ad02fc22b5fb9db8c"
+      "source": "github.com/kpenfound/dagger-modules/golang@fd1a6e75721454d8ee3bcb0bd1a94d6bb4be1737"
     }
   ],
   "source": ".",
-  "engineVersion": "v0.11.8"
+  "engineVersion": "v0.12.3"
 }

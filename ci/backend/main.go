@@ -1,32 +1,34 @@
-// A generated module for Backend functions
-//
-// This module has been generated via dagger init and serves as a reference to
-// basic module structure as you get started with Dagger.
-//
-// Two functions have been pre-created. You can modify, delete, or add to them,
-// as needed. They demonstrate usage of arguments and return types using simple
-// echo and grep commands. The functions can be called from the dagger CLI or
-// from one of the SDKs.
-//
-// The first line in this comment block is a short description line and the
-// rest is a long description with more detail on the module's purpose or usage,
-// if appropriate. All modules should have a short description.
-
 package main
 
 import (
 	"context"
 	"runtime"
+
+	"dagger/backend/internal/dagger"
 )
 
-type Backend struct{}
+type Backend struct {
+	// +private
+	Source *dagger.Directory
+}
+
+func New() *Backend {
+
+	source := dag.Git("https://github.com/NunoFrRibeiro/personal-blog.git", dagger.GitOpts{
+		KeepGitDir: true,
+	}).Branch("finish-blog").Tree()
+
+	return &Backend{
+		Source: source,
+	}
+}
 
 // Run the projects unit tests
 func (b *Backend) RunUnitTests(
 	ctx context.Context,
 	// Point to the host directory where the project is located
 	// +required
-	dir *Directory,
+	dir *dagger.Directory,
 ) (string, error) {
 	return dag.Golang().
 		WithProject(dir).
@@ -38,7 +40,7 @@ func (b *Backend) Lint(
 	ctx context.Context,
 	// Point to the host directory where the project is located
 	// +required
-	dir *Directory,
+	dir *dagger.Directory,
 ) (string, error) {
 	return dag.Golang().
 		WithProject(dir).
@@ -49,19 +51,18 @@ func (b *Backend) Lint(
 func (b *Backend) BuildProject(
 	// Point to the host directory where the project is located
 	// +required
-	dir *Directory,
+	dir *dagger.Directory,
 	// If needded, specify the archtecture of the binary
 	// +optional
 	arch string,
-) *Directory {
-
+) *dagger.Directory {
 	if arch == "" {
 		arch = runtime.GOARCH
 	}
 
 	return dag.Golang().
-		WithProject(dir).
-		Build([]string{}, GolangBuildOpts{
+		WithProject(b.Source).
+		Build([]string{}, dagger.GolangBuildOpts{
 			Arch: arch,
 		})
 }
@@ -70,48 +71,55 @@ func (b *Backend) BuildProject(
 func (b *Backend) Binary(
 	// Point to the host directory where the project is located
 	// +required
-	dir *Directory,
+	dir *dagger.Directory,
 	// If needded, specify the archtecture of the binary
 	// +optional
 	arch string,
-) *File {
-
+) *dagger.File {
 	binary := b.BuildProject(dir, arch)
 
-	return binary.File("go-blog")
+	return binary.File("personal-blog")
 }
 
 // Create a container to run the binary
 func (b *Backend) Container(
 	// Point to the host directory where the project is located
 	// +required
-	dir *Directory,
+	dir *dagger.Directory,
 	// If needded, specify the archtecture of the binary
 	// +optional
 	arch string,
-) *Container {
-
+) *dagger.Container {
 	if arch == "" {
 		arch = runtime.GOARCH
+	}
+
+	if dir == nil {
+		dir = b.Source
 	}
 
 	binary := b.Binary(dir, arch)
 
 	return dag.
-		Container(ContainerOpts{
-			Platform: Platform(arch),
+		Container(dagger.ContainerOpts{
+			Platform: dagger.Platform(arch),
 		}).
-		From("golang:1.21.7-alpine3.18@sha256:2a690031ca4e8affec4c25b1dbbafd5e734527b6ac6c8b58001cd6f342af7a44").
-		WithFile("/bin/go-blog", binary).
-		WithEntrypoint([]string{"/bin/go-blog"}).
-		WithExposedPort(8080)
+		// From("golang:latest@sha256:5176d0b2d4762f762af3b7804d67e4f21ba92b2196806ee0385547931b9df0b4").
+		From("ubuntu:24.10").
+		WithWorkdir("/opt/blog").
+		WithDirectory("posts", b.Source.Directory("posts")).
+		WithDirectory("static", b.Source.Directory("static")).
+		WithDirectory("templates", b.Source.Directory("templates")).
+		WithFile("blog-bin", binary).
+		WithEntrypoint([]string{"./blog-bin"}).
+		WithExposedPort(8081)
 }
 
 // Run a service to test the go-blog
 func (b *Backend) Serve(
 	// Point to the host directory where the project is located
 	// +required
-	dir *Directory,
-) *Service {
+	dir *dagger.Directory,
+) *dagger.Service {
 	return b.Container(dir, runtime.GOARCH).AsService()
 }
