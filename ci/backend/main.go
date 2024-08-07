@@ -111,7 +111,7 @@ func (b *Backend) Container(
 		WithDirectory("static", b.Source.Directory("static")).
 		WithDirectory("templates", b.Source.Directory("templates")).
 		WithFile("blog-bin", binary).
-		WithExec([]string{"./blog-bin"}).
+		WithEntrypoint([]string{"./blog-bin"}).
 		WithExposedPort(8081)
 }
 
