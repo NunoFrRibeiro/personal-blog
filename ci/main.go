@@ -94,15 +94,17 @@ func (g *Goblog) Deploy(
 	}
 
 	result, err := dag.Flyio(flyToken, dagger.FlyioOpts{
-		Version: "v0.2.93",
+		Version: "latest",
 		Regions: "mad",
-		Org:     "personal",
-	}).Deploy(ctx, source)
+		Org:     "nuno-ribeiro",
+	}).Deploy(ctx, source, dagger.FlyioDeployOpts{
+		Image: IMAGE,
+	})
 	if err != nil {
 		return "", err
 	}
 
-	return fmt.Sprintf("Blog deployed to Fly.io %s", result), err
+	return fmt.Sprintf("Blog deployed to Fly.io %s", result), nil
 }
 
 func (g *Goblog) RunAll(
@@ -110,9 +112,12 @@ func (g *Goblog) RunAll(
 	// Point to the host directory where the project is located
 	// +required
 	source *dagger.Directory,
-	// Infisical Token to fetch secrets
+	// Infisical Auth Client ID
 	// +required
-	infisicalToken *dagger.Secret,
+	infisicalClientId *dagger.Secret,
+	// Infisical Auth Client Secret
+	// +required
+	infisicalClientSecret *dagger.Secret,
 	// Infisical Project to fetch secrets
 	// +required
 	infisicalProject string,
@@ -125,24 +130,24 @@ func (g *Goblog) RunAll(
 	}
 
 	// Run all Unit Tests
-	// testResult, err := g.RunUnitTests(ctx, source)
-	// if err != nil {
-	// 	return "", err
-	// }
+	testResult, err := g.RunUnitTests(ctx, source)
+	if err != nil {
+		return "", err
+	}
 
-	// result = result + "\n" + testResult
+	result = result + "\n" + testResult
 
 	// Deploy to Fly.io
-	if infisicalToken != nil && infisicalProject != "" {
+	if infisicalClientId != nil && infisicalProject != "" {
 
-		flyToken := dag.Infisical().GetSecret("FLY_TOKEN", infisicalToken, infisicalProject, "dev")
+		flyToken := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("FLY_TOKEN_2", infisicalProject, "dev", "")
 
-		registryUser, err := dag.Infisical().GetSecret("DH_USER", infisicalToken, infisicalProject, "dev").Plaintext(ctx)
+		registryUser, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_USER", infisicalProject, "dev", "").Plaintext(ctx)
 		if err != nil {
 			return "", err
 		}
 
-		registryPass := dag.Infisical().GetSecret("DH_PASS", infisicalToken, infisicalProject, "dev")
+		registryPass := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_PASS", infisicalProject, "dev", "")
 
 		deployResult, err := g.Deploy(ctx, source, flyToken, registryUser, registryPass)
 		if err != nil {

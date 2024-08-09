@@ -16,7 +16,7 @@ func New() *Backend {
 
 	source := dag.Git("https://github.com/NunoFrRibeiro/personal-blog.git", dagger.GitOpts{
 		KeepGitDir: true,
-	}).Branch("finish-blog").Tree()
+	}).Branch("main").Tree()
 
 	return &Backend{
 		Source: source,
