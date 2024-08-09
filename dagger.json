@@ -3,16 +3,12 @@
   "sdk": "go",
   "dependencies": [
     {
-      "name": "flyio",
-      "source": "github.com/NunoFrRibeiro/daggerverse/fly@bc8c5539c1bf9509ba48e98186f1399e98ea59e2"
-    },
-    {
       "name": "backend",
       "source": "ci/backend"
     },
     {
-      "name": "github-release",
-      "source": "github.com/kpenfound/jpadams-github-release@c6081b3210407d5ea49fce8874c5104afa8373cb"
+      "name": "flyio",
+      "source": "github.com/NunoFrRibeiro/daggerverse/fly@f14bd93ed69aa575e4047753d5d8b1e6776d464d"
     },
     {
       "name": "golang",
@@ -20,7 +16,7 @@
     },
     {
       "name": "infisical",
-      "source": "github.com/jpadams/daggerverse/infisical@2588936e041960999462b469ce7b8ef5504fc2eb"
+      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@76ca8a48572a29b230fc22433725f8ad9333b319"
     },
     {
       "name": "proxy",

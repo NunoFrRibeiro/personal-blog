@@ -3,11 +3,11 @@ Parent: Intro
 Order: 1
 MetaPropertyTitle: My new home page!
 MetaDescription: Hello there this is my home page.
-MetaOgURL: https://www.example.com/
+MetaOgURL: https://blog.nfribeiro.com
 ---
 # Hello, world;
 
-## A markdown h2
+## This is a intro page to my blog
 
 Lists:
 
