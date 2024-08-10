@@ -12,11 +12,17 @@ type Backend struct {
 	Source *dagger.Directory
 }
 
-func New() *Backend {
+func New(
+	// Project source directory
+	// +optional
+	source *dagger.Directory,
+) *Backend {
 
-	source := dag.Git("https://github.com/NunoFrRibeiro/personal-blog.git", dagger.GitOpts{
-		KeepGitDir: true,
-	}).Branch("main").Tree()
+	if source == nil {
+		source = dag.Git("https://github.com/NunoFrRibeiro/personal-blog.git", dagger.GitOpts{
+			KeepGitDir: true,
+		}).Branch("main").Tree()
+	}
 
 	return &Backend{
 		Source: source,

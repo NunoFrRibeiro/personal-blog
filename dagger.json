@@ -8,7 +8,7 @@
     },
     {
       "name": "flyio",
-      "source": "github.com/NunoFrRibeiro/daggerverse/fly@f14bd93ed69aa575e4047753d5d8b1e6776d464d"
+      "source": "github.com/NunoFrRibeiro/daggerverse/fly@9ff0cb36ce981e1f6fca4d4ffd678075cded91ec"
     },
     {
       "name": "golang",
@@ -16,7 +16,7 @@
     },
     {
       "name": "infisical",
-      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@76ca8a48572a29b230fc22433725f8ad9333b319"
+      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@4f06a3c8d839e5df4189e6526a54c53ab566b0de"
     },
     {
       "name": "proxy",
@@ -24,5 +24,5 @@
     }
   ],
   "source": "ci",
-  "engineVersion": "v0.12.3"
+  "engineVersion": "v0.12.4"
 }

@@ -140,14 +140,28 @@ func (g *Goblog) RunAll(
 	// Deploy to Fly.io
 	if infisicalClientId != nil && infisicalProject != "" {
 
-		flyToken := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("FLY_TOKEN_2", infisicalProject, "dev", "")
+		flyTokenStr, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("FLY_TOKEN", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
+			SecretPath: "/flyio",
+		}).Plaintext(ctx)
+		if err != nil {
+			return "", err
+		}
+		flyToken := dag.SetSecret("val", flyTokenStr)
 
-		registryUser, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_USER", infisicalProject, "dev", "").Plaintext(ctx)
+		registryUser, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_USER", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
+			SecretPath: "/flyio",
+		}).Plaintext(ctx)
 		if err != nil {
 			return "", err
 		}
 
-		registryPass := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_PASS", infisicalProject, "dev", "")
+		registryPassStr, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_PASS", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
+			SecretPath: "/flyio",
+		}).Plaintext(ctx)
+		if err != nil {
+			return "", err
+		}
+		registryPass := dag.SetSecret("val", registryPassStr)
 
 		deployResult, err := g.Deploy(ctx, source, flyToken, registryUser, registryPass)
 		if err != nil {
