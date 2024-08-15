@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: [main]
-  pull-request:
 
   env:
     DAGGER_VERSION: 0.12.4
