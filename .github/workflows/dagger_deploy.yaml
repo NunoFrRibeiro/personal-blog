@@ -6,8 +6,6 @@ on:
 
 env:
   DAGGER_VERSION: 0.12.4
-  INFISICAL_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
-  INFISICAL_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
 
 jobs:
   ci:
@@ -22,6 +20,9 @@ jobs:
         with:
           verb: call
           module: github.com/${{ github.repository }}@${{ github.ref }}
-          args: run-all --infisical-project 495b60ca-a6c5-46e9-bc08-6e37b1d715de --infisical-client-id ${{ env.INFISICAL_ID }} --infisical-client-secret ${{ env.INFISICAL_SECRET }} --source .
+          args: run-all --infisical-project 495b60ca-a6c5-46e9-bc08-6e37b1d715de --infisical-client-id env:INFISICAL_ID --infisical-client-secret env:INFISICAL_SECRET --source .
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
           version: ${{ env.DAGGER_VERSION }}
+        env:
+          INFISICAL_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+          INFISICAL_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
