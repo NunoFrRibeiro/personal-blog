@@ -10,7 +10,7 @@ import (
 
 var (
 	APP     = "personal-blog"
-	DH_REPO = "https://hub.docker.com/repository/docker/nunofilribeiro"
+	DH_REPO = "https://hub.docker.com/repository/docker/nunofilribeiro/go-blog"
 	GH_REPO = "https://github.com/NunoFrRibeiro/personal-blog"
 	IMAGE   = "nunofilribeiro/go-blog:latest"
 )
