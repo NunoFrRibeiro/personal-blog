@@ -10,7 +10,7 @@ import (
 
 var (
 	APP     = "personal-blog"
-	DH_REPO = "https://hub.docker.com/repository/docker/nunofilribeiro/go-blog"
+	DH_REPO = "https://hub.docker.com/r/nunofilribeiro/go-blog"
 	GH_REPO = "https://github.com/NunoFrRibeiro/personal-blog"
 	IMAGE   = "nunofilribeiro/go-blog:latest"
 )
@@ -146,7 +146,7 @@ func (g *Goblog) RunAll(
 		if err != nil {
 			return "", err
 		}
-		flyToken := dag.SetSecret("val", flyTokenStr)
+		flyToken := dag.SetSecret("val_1", flyTokenStr)
 
 		registryUser, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_USER", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
 			SecretPath: "/flyio",
@@ -161,7 +161,7 @@ func (g *Goblog) RunAll(
 		if err != nil {
 			return "", err
 		}
-		registryPass := dag.SetSecret("val", registryPassStr)
+		registryPass := dag.SetSecret("val_2", registryPassStr)
 
 		deployResult, err := g.Deploy(ctx, source, flyToken, registryUser, registryPass)
 		if err != nil {
