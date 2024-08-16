@@ -81,7 +81,7 @@ func (g *Goblog) Deploy(
 	})
 
 	_, err := dag.Container().
-		WithRegistryAuth(DH_REPO, registryUser, registryPass).
+		//WithRegistryAuth(DH_REPO, registryUser, registryPass).
 		Publish(ctx, IMAGE, dagger.ContainerPublishOpts{
 			PlatformVariants: []*dagger.Container{
 				blogAmd64,
