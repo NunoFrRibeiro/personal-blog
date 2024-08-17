@@ -9,9 +9,10 @@ import (
 )
 
 var (
-	APP     = "personal-blog"
-	DH_REPO = "https://hub.docker.com/r/nunofilribeiro/go-blog"
+	APP = "personal-blog"
+	// DH_REPO = "docker.io/nunofilribeiro/go-blog"
 	GH_REPO = "https://github.com/NunoFrRibeiro/personal-blog"
+	DH_REPO = "index.docker.io"
 	IMAGE   = "nunofilribeiro/go-blog:latest"
 )
 
@@ -81,7 +82,7 @@ func (g *Goblog) Deploy(
 	})
 
 	_, err := dag.Container().
-		//WithRegistryAuth(DH_REPO, registryUser, registryPass).
+		WithRegistryAuth(DH_REPO, registryUser, registryPass).
 		Publish(ctx, IMAGE, dagger.ContainerPublishOpts{
 			PlatformVariants: []*dagger.Container{
 				blogAmd64,
@@ -140,13 +141,9 @@ func (g *Goblog) RunAll(
 	// Deploy to Fly.io
 	if infisicalClientId != nil && infisicalProject != "" {
 
-		flyTokenStr, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("FLY_TOKEN", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
+		flyToken := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("FLY_TOKEN", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
 			SecretPath: "/flyio",
-		}).Plaintext(ctx)
-		if err != nil {
-			return "", err
-		}
-		flyToken := dag.SetSecret("val_1", flyTokenStr)
+		})
 
 		registryUser, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_USER", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
 			SecretPath: "/flyio",
@@ -155,13 +152,9 @@ func (g *Goblog) RunAll(
 			return "", err
 		}
 
-		registryPassStr, err := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_PASS", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
-			SecretPath: "/flyio",
-		}).Plaintext(ctx)
-		if err != nil {
-			return "", err
-		}
-		registryPass := dag.SetSecret("val_2", registryPassStr)
+		registryPass := dag.Infisical(infisicalClientId, infisicalClientSecret).GetSecret("DH_PASS", infisicalProject, "dev", dagger.InfisicalGetSecretOpts{
+			SecretPath: "/",
+		})
 
 		deployResult, err := g.Deploy(ctx, source, flyToken, registryUser, registryPass)
 		if err != nil {
