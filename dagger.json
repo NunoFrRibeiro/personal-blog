@@ -3,6 +3,10 @@
   "sdk": "go",
   "dependencies": [
     {
+      "name": "infisical",
+      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37"
+    },
+    {
       "name": "backend",
       "source": "ci/backend"
     },
@@ -15,14 +19,10 @@
       "source": "github.com/kpenfound/dagger-modules/golang@fd1a6e75721454d8ee3bcb0bd1a94d6bb4be1737"
     },
     {
-      "name": "infisical",
-      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@4f06a3c8d839e5df4189e6526a54c53ab566b0de"
-    },
-    {
       "name": "proxy",
       "source": "github.com/kpenfound/dagger-modules/proxy@beaf4600637b3f492cd3e1e1598ef799d8cd3164"
     }
   ],
   "source": "ci",
-  "engineVersion": "v0.12.4"
+  "engineVersion": "v0.12.5"
 }
