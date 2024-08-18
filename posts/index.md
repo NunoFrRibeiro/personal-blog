@@ -11,13 +11,19 @@ MetaOgURL: https://blog.nfribeiro.com
 
 Let's find out:
 
-> [!question] Who am I?
-> Hello, my name is Nuno Ribeiro, and I started my professional career as a Civil Engineer.
-> I’ve made a career change in 2021 to Software Development, and fell in love with DevOps.
-> I've worked as a DevOps Engineer from 2022 till now.
+***Who am I?***
 
-> [!question] Why did I start a blog?
-> Why wanted to learn more about Golang, so I started this project so that I could learn more,
-> about Go programming
-> I think I've learned a bit along the way.
+```
+Hello, my name is Nuno Ribeiro, and I started my professional career as a Civil Engineer.
+I’ve made a career change in 2021 to Software Development, and fell in love with DevOps.
+I've worked as a DevOps Engineer from 2022 till now.
+```
 
+
+***Why did I start a blog?***
+
+```
+Why wanted to learn more about Golang, so I started this project so that I could learn more,
+about Go programming
+I think I've learned a bit along the way.
+```

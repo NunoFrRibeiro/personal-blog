@@ -1,18 +1,28 @@
-name: CI
+name: Run tests and Lint on Pull Requests
 
 on:
-  push:
+  pull-requests:
     paths-ignore:
       - README.md
       - .github/*
-    branches: [main]
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  # Enable manual trigger for easy debugging
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
 
 env:
   DAGGER_VERSION: 0.12.4
 
 jobs:
-  ci:
-    name: ci
+  lint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -22,9 +32,7 @@ jobs:
         uses: dagger/dagger-for-github@29a88e72255e732147ba18a670978b90bcc59efd # v6.4.0  
         with:
           verb: call
-          args: run-all --infisical-project 495b60ca-a6c5-46e9-bc08-6e37b1d715de --infisical-client-id env:INFISICAL_ID --infisical-client-secret env:INFISICAL_SECRET --source .
+          args: lint --source .
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
           version: ${{ env.DAGGER_VERSION }}
-        env:
-          INFISICAL_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
-          INFISICAL_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+
