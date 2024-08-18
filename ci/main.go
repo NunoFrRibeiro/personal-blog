@@ -13,7 +13,7 @@ var (
 	APP     = "personal-blog"
 	GH_REPO = "https://github.com/NunoFrRibeiro/personal-blog"
 	DH_REPO = "index.docker.io"
-	IMAGE   = "nunofilribeiro/go-blog:latest"
+	IMAGE   = "nunofilribeiro/go-blog:v0.1.0"
 )
 
 type Goblog struct {
