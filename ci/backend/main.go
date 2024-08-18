@@ -7,27 +7,7 @@ import (
 	"dagger/backend/internal/dagger"
 )
 
-type Backend struct {
-	// +private
-	Source *dagger.Directory
-}
-
-func New(
-	// Project source directory
-	// +optional
-	source *dagger.Directory,
-) *Backend {
-
-	if source == nil {
-		source = dag.Git("https://github.com/NunoFrRibeiro/personal-blog.git", dagger.GitOpts{
-			KeepGitDir: true,
-		}).Branch("main").Tree()
-	}
-
-	return &Backend{
-		Source: source,
-	}
-}
+type Backend struct{}
 
 // Run the projects unit tests
 func (b *Backend) RunUnitTests(
@@ -67,7 +47,7 @@ func (b *Backend) BuildProject(
 	}
 
 	return dag.Golang().
-		WithProject(b.Source).
+		WithProject(dir).
 		Build([]string{}, dagger.GolangBuildOpts{
 			Arch: arch,
 		})
@@ -100,10 +80,6 @@ func (b *Backend) Container(
 		arch = runtime.GOARCH
 	}
 
-	if dir == nil {
-		dir = b.Source
-	}
-
 	binary := b.Binary(dir, arch)
 
 	return dag.
@@ -113,9 +89,9 @@ func (b *Backend) Container(
 		// From("golang:latest@sha256:5176d0b2d4762f762af3b7804d67e4f21ba92b2196806ee0385547931b9df0b4").
 		From("ubuntu:24.10").
 		WithWorkdir("/opt/blog").
-		WithDirectory("posts", b.Source.Directory("posts")).
-		WithDirectory("static", b.Source.Directory("static")).
-		WithDirectory("templates", b.Source.Directory("templates")).
+		WithDirectory("posts", dir.Directory("posts")).
+		WithDirectory("static", dir.Directory("static")).
+		WithDirectory("templates", dir.Directory("templates")).
 		WithFile("blog-bin", binary).
 		WithEntrypoint([]string{"./blog-bin"}).
 		WithExposedPort(8081)

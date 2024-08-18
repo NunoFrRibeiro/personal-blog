@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -9,23 +10,46 @@ import (
 )
 
 var (
-	APP = "personal-blog"
-	// DH_REPO = "docker.io/nunofilribeiro/go-blog"
+	APP     = "personal-blog"
 	GH_REPO = "https://github.com/NunoFrRibeiro/personal-blog"
 	DH_REPO = "index.docker.io"
 	IMAGE   = "nunofilribeiro/go-blog:latest"
 )
 
-type Goblog struct{}
+type Goblog struct {
+	// +private
+	Source *dagger.Directory
+}
+
+func New(
+	// Project source directory
+	// +optional
+	source *dagger.Directory,
+
+	// Checkout the repository (at the designated ref) and use it as the source directory instead of the local one.
+	// +optional
+	ref string,
+) (*Goblog, error) {
+	if source == nil && ref != "" {
+		source = dag.Git("https://github.com/NunoFrRibeiro/personal-blog.git", dagger.GitOpts{
+			KeepGitDir: true,
+		}).Ref(ref).Tree()
+	}
+
+	if source == nil {
+		return nil, errors.New("either source or ref is needed")
+	}
+
+	return &Goblog{
+		Source: source,
+	}, nil
+}
 
 // Run unit tests on the Project
 func (g *Goblog) RunUnitTests(
 	ctx context.Context,
-	// Point to the host directory where the project is located
-	// +required
-	dir *dagger.Directory,
 ) (string, error) {
-	result, err := dag.Backend().RunUnitTests(ctx, dir)
+	result, err := dag.Backend().RunUnitTests(ctx, g.Source)
 	if err != nil {
 		return "", err
 	}
@@ -36,11 +60,8 @@ func (g *Goblog) RunUnitTests(
 // Lint the Project
 func (g *Goblog) Lint(
 	ctx context.Context,
-	// Point to the host directory where the project is located
-	// +required
-	dir *dagger.Directory,
 ) (string, error) {
-	result, err := dag.Backend().Lint(ctx, dir)
+	result, err := dag.Backend().Lint(ctx, g.Source)
 	if err != nil {
 		return "", err
 	}
@@ -49,12 +70,8 @@ func (g *Goblog) Lint(
 }
 
 // Serve the blog on port 8080
-func (g *Goblog) Serve(
-	// Point to the host directory where the project is located
-	// +required
-	source *dagger.Directory,
-) *dagger.Service {
-	backendService := dag.Backend().Serve(source)
+func (g *Goblog) Serve() *dagger.Service {
+	backendService := dag.Backend().Serve(g.Source)
 	numInt32, _ := strconv.Atoi("8081")
 
 	return dag.Proxy().
@@ -65,13 +82,12 @@ func (g *Goblog) Serve(
 // Deploy the blog to fly.io
 func (g *Goblog) Deploy(
 	ctx context.Context,
-	// Point to the host directory where the project is located
-	// +required
-	source *dagger.Directory,
 	flyToken *dagger.Secret,
 	registryUser string,
 	registryPass *dagger.Secret,
 ) (string, error) {
+
+	source := g.Source
 
 	blogAmd64 := dag.Backend().Container(source, dagger.BackendContainerOpts{
 		Arch: "amd64",
@@ -110,9 +126,6 @@ func (g *Goblog) Deploy(
 
 func (g *Goblog) RunAll(
 	ctx context.Context,
-	// Point to the host directory where the project is located
-	// +required
-	source *dagger.Directory,
 	// Infisical Auth Client ID
 	// +required
 	infisicalClientId *dagger.Secret,
@@ -125,13 +138,13 @@ func (g *Goblog) RunAll(
 ) (string, error) {
 
 	// Lint the source
-	result, err := g.Lint(ctx, source)
+	result, err := g.Lint(ctx)
 	if err != nil {
 		return "", err
 	}
 
 	// Run all Unit Tests
-	testResult, err := g.RunUnitTests(ctx, source)
+	testResult, err := g.RunUnitTests(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -156,7 +169,7 @@ func (g *Goblog) RunAll(
 			SecretPath: "/",
 		})
 
-		deployResult, err := g.Deploy(ctx, source, flyToken, registryUser, registryPass)
+		deployResult, err := g.Deploy(ctx, flyToken, registryUser, registryPass)
 		if err != nil {
 			return "", err
 		}
