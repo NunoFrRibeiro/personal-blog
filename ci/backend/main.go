@@ -86,7 +86,6 @@ func (b *Backend) Container(
 		Container(dagger.ContainerOpts{
 			Platform: dagger.Platform(arch),
 		}).
-		// From("golang:latest@sha256:5176d0b2d4762f762af3b7804d67e4f21ba92b2196806ee0385547931b9df0b4").
 		From("ubuntu:24.10").
 		WithWorkdir("/opt/blog").
 		WithDirectory("posts", dir.Directory("posts")).
