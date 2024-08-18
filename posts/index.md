@@ -5,7 +5,7 @@ MetaPropertyTitle: My new home page!
 MetaDescription: Hello there this is my home page.
 MetaOgURL: https://blog.nfribeiro.com
 ---
-# Hello, world;
+# Hello, there!
 
 ## Who am I and why did I start a blog?
 
