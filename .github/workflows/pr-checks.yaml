@@ -1,7 +1,7 @@
-name: Run tests and Lint on Pull Requests
+name: Tests and Lint PR
 
 on:
-  pull-requests:
+  pull_request:
     paths-ignore:
       - README.md
       - .github/*
