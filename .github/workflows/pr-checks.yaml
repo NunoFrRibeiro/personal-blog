@@ -3,15 +3,13 @@ name: Tests and Lint PR
 on:
   pull_request:
     paths-ignore:
-      - README.md
-      - .github/*
+      - 'README.md'
+      - '.github/*'
     types:
       - opened
       - synchronize
       - reopened
       - ready_for_review
-  # Enable manual trigger for easy debugging
-  workflow_dispatch:
 
 permissions:
   contents: read
