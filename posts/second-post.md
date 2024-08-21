@@ -1,6 +1,6 @@
 Title: My second blog post
 Slug: my-second-blog-post
-Parent: Cute cats here
+Parent: Posts
 Order: 3
 Description: Your cool strap line
 MetaPropertyTitle: Some title
