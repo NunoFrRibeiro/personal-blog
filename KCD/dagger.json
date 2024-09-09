@@ -1,0 +1,16 @@
+{
+  "name": "kcd",
+  "sdk": "go",
+  "dependencies": [
+    {
+      "name": "helm",
+      "source": "github.com/sagikazarmark/daggerverse/helm@07f08ab95be76586c798bc55424c684ad6d41497"
+    },
+    {
+      "name": "k3s",
+      "source": "github.com/marcosnils/daggerverse/k3s@ce8fe35d309bdb29f9983f7d90ea518e724534fe"
+    }
+  ],
+  "source": ".",
+  "engineVersion": "v0.12.7"
+}
