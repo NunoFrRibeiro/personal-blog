@@ -2,11 +2,11 @@ timeout := "400s"
 ARGO_WORKFLOWS_VERSION := "v3.5.10"
 wf_url := """
   ARGO WORKFLOWS
-  https://localhost:2746
+  http://localhost:2746
 """
 cd_url := """
   ARGO WORKFLOWS
-  https://localhost:8080
+  http://localhost:8080
 """
 
 # Creates the kind cluster and deploys Ar
@@ -32,6 +32,12 @@ wf:
 events:
   helm upgrade --install argo-events argo/argo-events --namespace argo-events --create-namespace \
     --values="./values/argo-events.yaml" --wait
+
+# Start the demo (requires User Input)
+demo:
+  kubectl --namespace argo-events create secret generic github --from-literal token=$(infisical secrets get GITHUB_API_TOKEN --plain)
+  argocd app create blog --repo https://github.com/NunoFrRibeiro/personal-blog.git \
+    --path manifests --dest-server https://kubernetes.default.svc --dest-namespace default
 
 # Deploy the full suite for the demo
 start: create-cluster cd wf events

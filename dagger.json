@@ -3,20 +3,20 @@
   "sdk": "go",
   "dependencies": [
     {
-      "name": "infisical",
-      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37"
-    },
-    {
       "name": "backend",
       "source": "ci/backend"
     },
     {
       "name": "flyio",
-      "source": "github.com/NunoFrRibeiro/daggerverse/fly@9ff0cb36ce981e1f6fca4d4ffd678075cded91ec"
+      "source": "github.com/NunoFrRibeiro/daggerverse/fly@4fa303bebcf3544dc2428f27141565230ca99885"
     },
     {
       "name": "golang",
       "source": "github.com/kpenfound/dagger-modules/golang@fd1a6e75721454d8ee3bcb0bd1a94d6bb4be1737"
+    },
+    {
+      "name": "infisical",
+      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37"
     },
     {
       "name": "proxy",
@@ -24,5 +24,5 @@
     }
   ],
   "source": "ci",
-  "engineVersion": "v0.12.4"
+  "engineVersion": "v0.12.7"
 }
