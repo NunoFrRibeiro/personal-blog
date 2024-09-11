@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - 'README.md'
       - '.github/*'
-      - 'KCD/*'
+      - './KCD/*'
     types:
       - opened
       - synchronize
