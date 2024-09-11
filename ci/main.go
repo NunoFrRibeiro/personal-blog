@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strconv"
 
@@ -24,6 +23,8 @@ type Goblog struct {
 func New(
 	// Project source directory
 	// +optional
+	// +defaultPath="../"
+	// +private
 	source *dagger.Directory,
 
 	// Checkout the repository (at the designated ref) and use it as the source directory instead of the local one.
@@ -36,9 +37,9 @@ func New(
 		}).Ref(ref).Tree()
 	}
 
-	if source == nil {
-		return nil, errors.New("either source or ref is needed")
-	}
+	// if source == nil {
+	// 	return nil, errors.New("either source or ref is needed")
+	// }
 
 	return &Goblog{
 		Source: source,
