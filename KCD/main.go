@@ -46,47 +46,71 @@ func (c *Kcd) KNS() *dagger.Container {
 
 func (c *Kcd) DemoStart(
 	ctx context.Context,
-) (string, error) {
+	// Auth Client Id to fetch credentials
+	// +required
+	authClientId *dagger.Secret,
+	// Auth Client Id to fetch credentials
+	// +required
+	authClientSecret *dagger.Secret,
+
+) (*dagger.Container, error) {
 	_, err := c.CreateCluster(ctx).KCDServer.Start(ctx)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	kubeConfig := c.GetConfig()
 
-	return dag.Container().From("alpine:latest").
+	daggerCloud := dag.Infisical(authClientId, authClientSecret).
+		GetSecret("DAGGER_CLOUD", "495b60ca-a6c5-46e9-bc08-6e37b1d715de", "dev")
+
+	return dag.Container().From("bitnami/kubectl:1.31.0-debian-12-r4").
 		WithUser("root").
 		WithFile("/.kube/config", kubeConfig).
 		WithEnvVariable("KUBECONFIG", "/.kube/config").
+		WithExec([]string{"chown", "1001:0", "/.kube/config"}).
 		WithExec([]string{
-			"sh",
+			"bash",
 			"-c",
-			"apk update && apk add curl openssl",
+			"apt update && apt install -y curl",
 		}).
 		WithDirectory("/demo", c.Source).
+		WithSecretVariable("DAGGER_CLOUD", daggerCloud).
 		WithExec([]string{
-			"sh",
+			"bash",
 			"-c",
-			"curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sh",
+			"curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash",
 		}).
 		WithExec([]string{
-			"sh",
+			"bash",
 			"-c",
 			"helm repo add argo https://argoproj.github.io/argo-helm",
 		}).
+		// WithExec([]string{
+		// 	"bash",
+		// 	"-c",
+		// 	"helm upgrade --install argo-cd argo/argo-cd --namespace argo --create-namespace --values=/demo/values/argocd.yaml --wait",
+		// }).
 		WithExec([]string{
-			"sh",
-			"-c",
-			"helm upgrade --install argo-cd argo/argo-cd --namespace argocd --create-namespace --values=/demo/values/argocd.yaml --wait",
-		}).
-		WithExec([]string{
-			"sh",
+			"bash",
 			"-c",
 			"helm upgrade --install argo-wf argo/argo-workflows --namespace argo --create-namespace --values=/demo/values/argo-workflow.yaml",
 		}).
 		WithExec([]string{
-			"sh",
+			"bash",
 			"-c",
-			"helm upgrade --install argo-events argo/argo-events --namespace argo-events --create-namespace --values=/demo/values/argo-events.yaml --wait",
-		}).Stdout(ctx)
+			"helm upgrade --install argo-events argo/argo-events --namespace argo --create-namespace --values=/demo/values/argo-events.yaml --wait",
+		}).
+		WithExec([]string{
+			"bash",
+			"-c",
+			"kubectl create secret generic -n default dagger-cloud --from-literal=token=$DAGGER_CLOUD",
+			"kubectl create secret generic -n argo dagger-cloud --from-literal=token=$DAGGER_CLOUD",
+		}).
+		WithExec([]string{
+			"bash",
+			"-c",
+			"kubectl create -f /demo/dagger-workflow.yaml",
+			"kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:dagger-workflow",
+		}), nil
 }
