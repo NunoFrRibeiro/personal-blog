@@ -18,10 +18,6 @@ spec:
           # replace with the latest available version of Dagger for your platform
           image: registry.dagger.io/engine:v0.13.0
           securityContext:
-            # runAsUser: 0
-            # runAsGroup: 0
-            # runAsNonRoot: false
-            # fsGroup: 0
             privileged: true
             capabilities:
               add:
@@ -41,7 +37,7 @@ spec:
             git:
               # replace with your repository URL
               repo: https://github.com/NunoFrRibeiro/personal-blog.git
-              revision: "main"
+              revision: "kcd-porto"
           - name: dagger-cli
             path: /usr/local/bin
             mode: 0755
@@ -52,18 +48,18 @@ spec:
         image: alpine:latest
         command: ["sh", "-c"]
         # modify to use different function(s) as needed
-        args: ["dagger call test"]
+        args: ["dagger call --source . lint"]
         workingDir: /blog
         env:
         - name: "_EXPERIMENTAL_DAGGER_RUNNER_HOST"
           value: "unix:///var/run/dagger/buildkitd.sock"
           # assumes the Dagger Cloud token is
           # in a Kubernetes secret named dagger-cloud
-        # - name: "DAGGER_CLOUD_TOKEN"
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: dagger-cloud
-        #       key: token
+        - name: "DAGGER_CLOUD_TOKEN"
+          valueFrom:
+            secretKeyRef:
+              name: dagger-cloud
+              key: token
         volumeMounts:
           - mountPath: /var/run/dagger
             name: dagger-socket
