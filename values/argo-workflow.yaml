@@ -1,3 +1,20 @@
 server:
   authModes:
     - server
+controller:
+  securityContext:
+    allowPrivilegeEscalation: true
+    capabilities:
+      add:
+        - ALL
+  workflowNamespaces:
+    - argo
+  workflowDefaults:
+    spec:
+       serviceAccountName: dagger-workflow
+workflow:
+  serviceAccount:
+    create: true
+    name: "dagger-workflow"
+  rbac:
+    create: true
