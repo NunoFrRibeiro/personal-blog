@@ -86,11 +86,6 @@ func (c *Kcd) DemoStart(
 			"-c",
 			"helm repo add argo https://argoproj.github.io/argo-helm",
 		}).
-		// WithExec([]string{
-		// 	"bash",
-		// 	"-c",
-		// 	"helm upgrade --install argo-cd argo/argo-cd --namespace argo --create-namespace --values=/demo/values/argocd.yaml --wait",
-		// }).
 		WithExec([]string{
 			"bash",
 			"-c",
@@ -104,7 +99,6 @@ func (c *Kcd) DemoStart(
 		WithExec([]string{
 			"bash",
 			"-c",
-			"kubectl create secret generic -n default dagger-cloud --from-literal=token=$DAGGER_CLOUD",
 			"kubectl create secret generic -n argo dagger-cloud --from-literal=token=$DAGGER_CLOUD",
 		}).
 		WithExec([]string{
