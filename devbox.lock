@@ -145,6 +145,54 @@
         }
       }
     },
+    "doctl@1.112": {
+      "last_modified": "2024-09-12T11:58:09Z",
+      "resolved": "github:NixOS/nixpkgs/280db3decab4cbeb22a4599bd472229ab74d25e1#doctl",
+      "source": "devbox-search",
+      "version": "1.112.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/v9zdjhn4q4wvfq59p8jissdvbxp9lw6w-doctl-1.112.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/v9zdjhn4q4wvfq59p8jissdvbxp9lw6w-doctl-1.112.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/5r6bq1pc70qqy9gbaf4wgkvzv74xcf9l-doctl-1.112.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/5r6bq1pc70qqy9gbaf4wgkvzv74xcf9l-doctl-1.112.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/3v7hbb8wa9imkgpv14lqh233qdll9kvn-doctl-1.112.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/3v7hbb8wa9imkgpv14lqh233qdll9kvn-doctl-1.112.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/f4ma2jw4vy1bjxvr0vn7m7s9xkclapcl-doctl-1.112.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/f4ma2jw4vy1bjxvr0vn7m7s9xkclapcl-doctl-1.112.0"
+        }
+      }
+    },
     "go@1.23.0": {
       "last_modified": "2024-08-31T10:12:23Z",
       "resolved": "github:NixOS/nixpkgs/5629520edecb69630a3f4d17d3d33fc96c13f6fe#go_1_23",
@@ -418,6 +466,54 @@
             }
           ],
           "store_path": "/nix/store/ii5025malv11pzdf55aw819hzmph3dr8-kubernetes-helm-3.15.4"
+        }
+      }
+    },
+    "talosctl@1.7.6": {
+      "last_modified": "2024-09-12T11:58:09Z",
+      "resolved": "github:NixOS/nixpkgs/280db3decab4cbeb22a4599bd472229ab74d25e1#talosctl",
+      "source": "devbox-search",
+      "version": "1.7.6",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/j5pmgh75adfw9fgs74smazzva7hwgp0h-talosctl-1.7.6",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/j5pmgh75adfw9fgs74smazzva7hwgp0h-talosctl-1.7.6"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wdwvaqs6j9nq81i6cjvn7hrxxmfadgdg-talosctl-1.7.6",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wdwvaqs6j9nq81i6cjvn7hrxxmfadgdg-talosctl-1.7.6"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/zb4kf1myljgm1mmvj7kfxzjfmjrkidvy-talosctl-1.7.6",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/zb4kf1myljgm1mmvj7kfxzjfmjrkidvy-talosctl-1.7.6"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/138hfs0c604fg12hs3cc1g7xb65w0xli-talosctl-1.7.6",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/138hfs0c604fg12hs3cc1g7xb65w0xli-talosctl-1.7.6"
         }
       }
     }

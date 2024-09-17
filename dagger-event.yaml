@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: dagger-event-source
+  namespace: argo
+spec:
+  github:
+    dagger-push:
+      owner: NunoFrRibeiro
+      names:
+        - personal-blog
+      webhook:
+        endpoint: /push
+        port: "12000"
+        method: POST
+        url: http://url-that-is-reachable-from-GitHub
+      events:
+        - push
+      apiToken:
+        valueFrom:
+          secretKeyRef:
+            name: github
+            key: token
+      insecure: false
+      active: true
+      contentType: json
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: dagger-push-sensor
+  namespace: argo
+spec:
+  template:
+    serviceAcocuntName: dagger-workflow-sa
+  dependencies:
+    - name: github-push
+      eventSourceName: dagger-event-source
+      eventName: dagger-push
+  triggers:
+    - template:
+        name: github-push-trigger
+        argoWorkflow:
+          group: argoproj.io
+          version: v1alpha1
+          resource: workflows
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: kcd-demo- 
+              spec:
+                workflowTemplateRef:
+                  name: kcd-demo

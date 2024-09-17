@@ -1,60 +1,39 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Workflow
+kind: WorkflowTemplate
 metadata:
-  generateName: kcd-demo-
+  name: kcd-demo
   namespace: argo
 spec:
-  serviceAccount: dagger-workflow
+  serviceAccountName: dagger-workflow
   entrypoint: dagger-workflow
   volumes:
     - name: dagger-socket
-      emptyDir: {}
-    - name: dagger-storage
-      emptyDir: {}
+      hostPath:
+        path: /var/run/dagger
   templates:
     - name: dagger-workflow
-      sidecars:
-        - name: dagger-engine
-          # replace with the latest available version of Dagger for your platform
-          image: registry.dagger.io/engine:v0.13.0
-          securityContext:
-            privileged: true
-            capabilities:
-              add:
-                - ALL
-          readinessProbe:
-            exec:
-              command: ["buildctl", "debug", "workers"]
-          volumeMounts:
-            - mountPath: /var/run/buildkit
-              name: dagger-socket
-            - mountPath: /var/lib/dagger
-              name: dagger-storage
       inputs:
         artifacts:
           - name: project-source
             path: /blog
             git:
-              # replace with your repository URL
               repo: https://github.com/NunoFrRibeiro/personal-blog.git
-              revision: "kcd-porto"
+              singleBranch: true
+              branch: "kcd-porto"
+              depth: 1
           - name: dagger-cli
             path: /usr/local/bin
             mode: 0755
             http:
-              # replace with the latest available version of Dagger for your platform
               url: https://github.com/dagger/dagger/releases/download/v0.13.0/dagger_v0.13.0_linux_amd64.tar.gz
       container:
         image: alpine:latest
         command: ["sh", "-c"]
-        # modify to use different function(s) as needed
         args: ["dagger call --source . lint"]
         workingDir: /blog
         env:
         - name: "_EXPERIMENTAL_DAGGER_RUNNER_HOST"
           value: "unix:///var/run/dagger/buildkitd.sock"
-          # assumes the Dagger Cloud token is
-          # in a Kubernetes secret named dagger-cloud
         - name: "DAGGER_CLOUD_TOKEN"
           valueFrom:
             secretKeyRef:
