@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"dagger/kcd/internal/dagger"
 )
 
@@ -52,7 +53,6 @@ func (c *Kcd) DemoStart(
 	// Auth Client Id to fetch credentials
 	// +required
 	authClientSecret *dagger.Secret,
-
 ) (*dagger.Container, error) {
 	_, err := c.CreateCluster(ctx).KCDServer.Start(ctx)
 	if err != nil {
@@ -89,6 +89,11 @@ func (c *Kcd) DemoStart(
 		WithExec([]string{
 			"bash",
 			"-c",
+			"helm upgrade --install --namespace=dagger --create-namespace dagger oci://registry.dagger.io/dagger-helm",
+		}).
+		WithExec([]string{
+			"bash",
+			"-c",
 			"helm upgrade --install argo-wf argo/argo-workflows --namespace argo --create-namespace --values=/demo/values/argo-workflow.yaml",
 		}).
 		WithExec([]string{
@@ -104,7 +109,7 @@ func (c *Kcd) DemoStart(
 		WithExec([]string{
 			"bash",
 			"-c",
-			"kubectl create -f /demo/dagger-workflow.yaml",
 			"kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:dagger-workflow",
+			"kubectl create -f /demo/dagger-workflow.yaml",
 		}), nil
 }

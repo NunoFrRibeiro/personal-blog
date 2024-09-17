@@ -11,10 +11,6 @@
       "source": "github.com/NunoFrRibeiro/daggerverse/fly@4fa303bebcf3544dc2428f27141565230ca99885"
     },
     {
-      "name": "golang",
-      "source": "github.com/kpenfound/dagger-modules/golang@fd1a6e75721454d8ee3bcb0bd1a94d6bb4be1737"
-    },
-    {
       "name": "infisical",
       "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37"
     },
@@ -24,5 +20,5 @@
     }
   ],
   "source": "ci",
-  "engineVersion": "v0.12.7"
+  "engineVersion": "v0.13.0"
 }

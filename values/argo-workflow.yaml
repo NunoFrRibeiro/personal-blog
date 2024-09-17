@@ -1,6 +1,18 @@
 server:
   authModes:
     - server
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - nfribeiro.com
+    paths:
+      - /argo
+    pathType: Prefix
+    tls:
+      - secretName: argoworkflows-tls
+        hosts:
+          - nfribeiro.com
 controller:
   securityContext:
     allowPrivilegeEscalation: true

@@ -4,47 +4,34 @@ wf_url := """
   ARGO WORKFLOWS
   http://localhost:2746
 """
-cd_url := """
-  ARGO WORKFLOWS
-  http://localhost:8080
-"""
 
-# Creates the kind cluster and deploys Ar
+# Creates the kind cluster and deploys
 create-cluster:
   kind create cluster
   kubectl cluster-info --context kind-kind
 
-# Deploys Argo-CD to the cluster
-cd:
-  -helm repo add argo https://argoproj.github.io/argo-helm
-  -helm upgrade --install argo-cd argo/argo-cd --namespace argocd --create-namespace \
-    --values ./values/argocd.yaml --wait
-  kubectl port-forward service/argo-cd-argocd-server -n argocd 8080:443 &
-
 # Deploys Argo-Worklows to the kind cluster
 wf:
+  -helm repo add argo https://argoproj.github.io/argo-helm
   -helm upgrade --install argo-workflows argo/argo-workflows --namespace argo --create-namespace \
-    --values="./values/argo-workflow.yaml"
-  -kubectl wait --for=condition=Ready po -n argo --all --timeout={{timeout}}
+    --values="./values/argo-workflow.yaml" --wait
   -kubectl -n argo port-forward service/argo-workflows-server 2746:2746 &
 
 # Deploys Argo-Events to the kind cluster
 events:
-  helm upgrade --install argo-events argo/argo-events --namespace argo-events --create-namespace \
+  helm upgrade --install argo-events argo/argo-events --namespace argo --create-namespace \
     --values="./values/argo-events.yaml" --wait
 
-# Start the demo (requires User Input)
+# Start the demo
 demo:
-  kubectl --namespace argo-events create secret generic github --from-literal token=$(infisical secrets get GITHUB_API_TOKEN --plain)
-  argocd app create blog --repo https://github.com/NunoFrRibeiro/personal-blog.git \
-    --path manifests --dest-server https://kubernetes.default.svc --dest-namespace default
+  -kubectl create secret generic -n argo github --from-literal token=$(infisical secrets get GITHUB_API_TOKEN --plain)
+  -kubectl create secret generic -n argo dagger-cloud --from-literal=token=$(infisical secrets get DAGGER_CLOUD --plain)
+  kubectl create -f dagger-workflow.yaml
 
 # Deploy the full suite for the demo
-start: create-cluster cd wf events
+start: create-cluster wf events
   @echo "All Deployed"
   @echo "{{wf_url}}"
-  @echo "{{cd_url}}"
-  @echo admin pass=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 
 # Clean all up
 destroy:
