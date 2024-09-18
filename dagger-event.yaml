@@ -80,7 +80,7 @@ spec:
               metadata:
                 generateName: kcd-demo- 
               spec:
-                serviceAcocuntName: dagger-workflow-sa
+                serviceAccountName: dagger-workflow-sa
                 workflowTemplateRef:
                   name: kcd-demo
 ---
