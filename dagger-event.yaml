@@ -60,7 +60,7 @@ spec:
   template:
     metadata:
       name: dagger-sn-po
-    serviceAcocuntName: dagger-workflow-sa
+    serviceAccountName: dagger-workflow-sa
   dependencies:
     - name: dagger-push
       eventSourceName: dagger-event-source
