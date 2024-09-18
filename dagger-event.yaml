@@ -31,13 +31,13 @@ spec:
         endpoint: /push
         port: "12000"
         method: POST
-        url: http://argoev.nfribeiro.com
-        serverCertSecret:
-         name: argoworkflows-tls
-         key: tls.crt
-        serverKeySecret:
-         name: argoworkflows-tls
-         key: tls.key
+        url: https://argoev.nfribeiro.com
+        # serverCertSecret:
+        #  name: argoworkflows-tls
+        #  key: tls.crt
+        # serverKeySecret:
+        #  name: argoworkflows-tls
+        #  key: tls.key
       events:
         - push
       webhookSecret:
@@ -49,8 +49,6 @@ spec:
       insecure: false
       active: true
       contentType: json
-      filter:
-        # expression: "(null != body.head_commit) && (indexOf(body.head_commit.message, '#NORUN') == -1) && hasPrefix(body.ref, 'refs/heads/release/')"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
@@ -113,7 +111,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: argo.nfribeiro.com
+  - host: argoev.nfribeiro.com
     http:
       paths:
       - path: /push
