@@ -1,29 +1,56 @@
 apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: dagger-eb
+  namespace: argo
+spec:
+  nats:
+    native: {}
+---
+apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
   name: dagger-event-source
   namespace: argo
+  labels:
+    app: dagger-wf
+    name: dagger-event-source
 spec:
+  eventBusName: dagger-eb
+  template:
+    metadata:
+      name: dagger-es-po
+    serviceAcocuntName: dagger-workflow-sa
   github:
     dagger-push:
-      owner: NunoFrRibeiro
-      names:
-        - personal-blog
+      repositories:
+        - owner: NunoFrRibeiro
+          names:
+           - personal-blog
       webhook:
         endpoint: /push
         port: "12000"
         method: POST
-        url: http://url-that-is-reachable-from-GitHub
+        url: http://argoev.nfribeiro.com
+        serverCertSecret:
+         name: argoworkflows-tls
+         key: tls.crt
+        serverKeySecret:
+         name: argoworkflows-tls
+         key: tls.key
       events:
         - push
+      webhookSecret:
+        name: github-secret
+        key: github-webhook-secret
       apiToken:
-        valueFrom:
-          secretKeyRef:
-            name: github
-            key: token
+        name: github
+        key: token
       insecure: false
       active: true
       contentType: json
+      filter:
+        # expression: "(null != body.head_commit) && (indexOf(body.head_commit.message, '#NORUN') == -1) && hasPrefix(body.ref, 'refs/heads/release/')"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
@@ -31,10 +58,13 @@ metadata:
   name: dagger-push-sensor
   namespace: argo
 spec:
+  eventBusName: dagger-eb
   template:
+    metadata:
+      name: dagger-sn-po
     serviceAcocuntName: dagger-workflow-sa
   dependencies:
-    - name: github-push
+    - name: dagger-push
       eventSourceName: dagger-event-source
       eventName: dagger-push
   triggers:
@@ -54,3 +84,46 @@ spec:
               spec:
                 workflowTemplateRef:
                   name: kcd-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dagger-es-svc
+  namespace: argo
+  labels:
+    app: dagger-wf
+    name: dagger-event-source
+spec:
+  type: ClusterIP
+  selector:
+    eventsource-name: dagger-event-source
+    owner-name: dagger-event-source
+  ports:
+  - port: 12000
+    targetPort: 12000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dagger-es-ing
+  namespace: argo
+  labels:
+    app: dagger-wf
+    name: dagger-event-source
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: argo.nfribeiro.com
+    http:
+      paths:
+      - path: /push
+        pathType: Prefix
+        backend:
+          service:
+            name: dagger-es-svc
+            port:
+              number: 12000
+  tls:
+  - hosts:
+    - argoev.nfribeiro.com
+    secretName: argoworkflows-tls

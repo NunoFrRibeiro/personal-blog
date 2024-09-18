@@ -5,9 +5,9 @@ server:
     enabled: true
     ingressClassName: "nginx"
     hosts:
-      - nfribeiro.com
+      - argo.nfribeiro.com
     paths:
-      - /argo
+      - /
     pathType: Prefix
     tls:
       - secretName: argoworkflows-tls

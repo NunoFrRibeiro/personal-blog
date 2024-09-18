@@ -72,7 +72,9 @@ func (g *Goblog) Serve() *dagger.Service {
 	numInt32, _ := strconv.Atoi("8081")
 
 	return dag.Proxy().
-		WithService(backendService, "backend", numInt32, numInt32, false).
+		WithService(backendService, "backend", numInt32, numInt32, dagger.ProxyWithServiceOpts{
+			IsTCP: false,
+		}).
 		Service()
 }
 
