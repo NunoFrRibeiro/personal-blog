@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       name: dagger-es-po
-    serviceAcocuntName: dagger-workflow-sa
+    serviceAccountName: dagger-workflow
   github:
     dagger-push:
       repositories:
@@ -80,7 +80,7 @@ spec:
               metadata:
                 generateName: kcd-demo- 
               spec:
-                serviceAccountName: dagger-workflow-sa
+                serviceAccountName: dagger-workflow
                 workflowTemplateRef:
                   name: kcd-demo
 ---
