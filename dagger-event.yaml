@@ -32,12 +32,6 @@ spec:
         port: "12000"
         method: POST
         url: https://argoev.nfribeiro.com
-        # serverCertSecret:
-        #  name: argoworkflows-tls
-        #  key: tls.crt
-        # serverKeySecret:
-        #  name: argoworkflows-tls
-        #  key: tls.key
       events:
         - push
       webhookSecret:
@@ -49,6 +43,8 @@ spec:
       insecure: false
       active: true
       contentType: json
+      filter:
+        expression: "(null != body.head_commit) && (indexOf(body.head_commit.message, '#NORUN') == -1) && hasPrefix(body.pusher.name, 'NunoFrRibeiro') && hasPrefix(body.ref, 'refs/heads/kcd-porto')"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor

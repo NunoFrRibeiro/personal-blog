@@ -4,11 +4,11 @@ metadata:
   name: kcd-demo
   namespace: argo
 spec:
-  serviceAccountName: dagger-workflow
+  serviceaccountname: dagger-workflow
   entrypoint: dagger-workflow
   volumes:
     - name: dagger-socket
-      hostPath:
+      hostpath:
         path: /var/run/dagger
   templates:
     - name: dagger-workflow
@@ -17,9 +17,9 @@ spec:
           - name: project-source
             path: /blog
             git:
-              repo: https://github.com/NunoFrRibeiro/personal-blog.git
-              singleBranch: true
-              branch: "kcd-porto"
+              repo: https://github.com/nunofrribeiro/personal-blog.git
+              singlebranch: true
+              branch: "main"
               depth: 1
           - name: dagger-cli
             path: /usr/local/bin
@@ -29,7 +29,7 @@ spec:
       container:
         image: alpine:latest
         command: ["sh", "-c"]
-        args: ["dagger call --source . lint"]
+        args: ["dagger call lint"]
         workingDir: /blog
         env:
         - name: "_EXPERIMENTAL_DAGGER_RUNNER_HOST"
