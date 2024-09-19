@@ -6,10 +6,6 @@ metadata:
 spec:
   serviceaccountname: dagger-workflow
   entrypoint: dagger-workflow
-  volumes:
-    - name: dagger-socket
-      hostpath:
-        path: /var/run/dagger
   templates:
     - name: dagger-workflow
       inputs:
@@ -19,18 +15,17 @@ spec:
             git:
               repo: https://github.com/nunofrribeiro/personal-blog.git
               singlebranch: true
-              branch: "kcd-porto"
+              branch: "main"
               depth: 1
           - name: dagger-cli
             path: /usr/local/bin
             mode: 0755
             http:
-              url: https://github.com/dagger/dagger/releases/download/v0.13.0/dagger_v0.13.1_linux_amd64.tar.gz
+              url: https://github.com/dagger/dagger/releases/download/v0.13.1/dagger_v0.13.1_linux_amd64.tar.gz
       container:
         image: alpine:latest
         command: ["sh", "-c"]
-        # args: ["dagger call run-all --infisical-project 495b60ca-a6c5-46e9-bc08-6e37b1d715de --infisical-client-id env:INFISICAL_ID --infisical-client-secret env:INFISICAL_SECRET"]
-        args: [dagger call lint]
+        args: ["dagger call run-all --infisical-project 495b60ca-a6c5-46e9-bc08-6e37b1d715de --infisical-client-id env:INFISICAL_ID --infisical-client-secret env:INFISICAL_SECRET"]
         workingDir: /blog
         env:
         - name: "_EXPERIMENTAL_DAGGER_RUNNER_HOST"
@@ -53,3 +48,7 @@ spec:
         volumeMounts:
           - mountPath: /var/run/dagger
             name: dagger-socket
+      volumes:
+        - name: dagger-socket
+          hostPath:
+            path: /var/run/dagger

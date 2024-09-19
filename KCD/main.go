@@ -31,7 +31,11 @@ func New(
 }
 
 func (c *Kcd) CreateCluster(ctx context.Context) *Kcd {
-	c.KCDServer = dag.K3S(c.Name).Server()
+	// c.KCDServer = dag.K3S(c.Name).Server()
+	kc := dag.K3S(c.Name).Container()
+	kc = kc.WithMountedCache("/var/lib/dagger", dag.CacheVolume("varlibdagger"))
+
+	c.KCDServer = dag.K3S(c.Name).WithContainer(kc).Server()
 	return c
 }
 
