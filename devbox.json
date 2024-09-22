@@ -12,6 +12,7 @@
     "bat@0.24.0",
     "talosctl@1.7.6",
     "doctl@1.112",
+    "gh@2.57.0",
   ],
   "shell": {
     "init_hook": [
