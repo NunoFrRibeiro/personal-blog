@@ -27,3 +27,5 @@ Why wanted to learn more about Golang, so I started this project so that I could
 about Go programming
 I think I've learned a bit along the way.
 ```
+
+Nuno Ribeiro
