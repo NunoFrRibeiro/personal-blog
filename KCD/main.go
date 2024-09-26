@@ -72,6 +72,9 @@ func (c *Kcd) TestWF(
 		WithUser("root").
 		WithFile("/.kube/config", kubeConfig).
 		WithEnvVariable("KUBECONFIG", "/.kube/config").
+		WithSecretVariable("DAGGER_CLOUD", daggerCloud).
+		WithSecretVariable("INFISICAL_SECRET", authClientSecret).
+		WithSecretVariable("INFISICAL_ID", authClientId).
 		WithExec([]string{"chown", "1001:0", "/.kube/config"}).
 		WithExec([]string{
 			"bash",
@@ -79,7 +82,6 @@ func (c *Kcd) TestWF(
 			"apt update && apt install -y curl",
 		}).
 		WithDirectory("/demo", c.Source).
-		WithSecretVariable("DAGGER_CLOUD", daggerCloud).
 		WithExec([]string{
 			"bash",
 			"-c",
@@ -104,6 +106,7 @@ func (c *Kcd) TestWF(
 			"bash",
 			"-c",
 			"kubectl create secret generic -n argo dagger-cloud --from-literal=token=$DAGGER_CLOUD",
+			"kubectl create secret generic -n argo infisical-secret -from-literal=infisical_secret=$INFISICAL_SECRET --from-literal=infisical_id=$INFISICAL_ID",
 		}).
 		WithExec([]string{
 			"bash",

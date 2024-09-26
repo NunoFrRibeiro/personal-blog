@@ -28,7 +28,7 @@ spec:
       container:
         image: alpine:latest
         command: ["sh", "-c"]
-        args: ["dagger call test-wf up"]
+        args: ["dagger call -m KCD test-wf up"]
         workingDir: /work
         env:
         - name: "_EXPERIMENTAL_DAGGER_RUNNER_HOST"
@@ -38,6 +38,16 @@ spec:
             secretKeyRef:
               name: dagger-cloud
               key: token
+        - name: "INFISICAL_SECRET"
+          valueFrom:
+            secretKeyRef:
+              name: infisical-secret
+              key: infisical_secret
+        - name: "INFISICAL_ID"
+          valueFrom:
+            secretKeyRef:
+              name: infisical-secret
+              key: infisical_id
         volumeMounts:
           - mountPath: /var/run/dagger
             name: dagger-socket

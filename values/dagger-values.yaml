@@ -1,4 +1,4 @@
 engine:
   image:
-    ref: registry.dagger.io/engine:v0.13.1
+    ref: registry.dagger.io/engine:v0.13.3
     pullPolicy: IfNotPresent
