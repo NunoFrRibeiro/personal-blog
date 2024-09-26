@@ -121,6 +121,23 @@ func (g *Goblog) Deploy(
 	return fmt.Sprintf("Blog deployed to Fly.io %s", result), nil
 }
 
+func  (g *Goblog) TestDeploy (
+  ctx context.Context,
+) (*dagger.Service, error){
+
+  _, err := g.Lint(ctx)
+  if err != nil {
+    return nil, err
+  }
+
+  _, err = g.RunUnitTests(ctx)
+  if err != nil {
+    return nil, err
+  }
+
+  return g.Serve(), nil
+}
+
 func (g *Goblog) RunAll(
 	ctx context.Context,
 	// Infisical Auth Client ID

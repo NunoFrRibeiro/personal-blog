@@ -1,17 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
+kind: Workflow
 metadata:
-  name: kcd-demo
+  generateName: dagger-in-argo-
   namespace: argo
 spec:
-  serviceaccountname: dagger-workflow
   entrypoint: dagger-workflow
+  volumes:
+    - name: dagger-socket
+      hostPath:
+        path: /var/run/dagger
   templates:
     - name: dagger-workflow
       inputs:
         artifacts:
           - name: project-source
-            path: /blog
+            path: /work
             git:
               repo: https://github.com/nunofrribeiro/personal-blog.git
               singlebranch: true
@@ -25,8 +28,8 @@ spec:
       container:
         image: alpine:latest
         command: ["sh", "-c"]
-        args: ["dagger call run-all --infisical-project 495b60ca-a6c5-46e9-bc08-6e37b1d715de --infisical-client-id env:INFISICAL_ID --infisical-client-secret env:INFISICAL_SECRET"]
-        workingDir: /blog
+        args: ["dagger call test-wf up"]
+        workingDir: /work
         env:
         - name: "_EXPERIMENTAL_DAGGER_RUNNER_HOST"
           value: "unix:///var/run/dagger/buildkitd.sock"
@@ -35,20 +38,6 @@ spec:
             secretKeyRef:
               name: dagger-cloud
               key: token
-        - name: "INFISICAL_SECRET"
-          valueFrom:
-            secretKeyRef:
-              name: infisical-secret
-              key: infisical_secret
-        - name: "INFISICAL_ID"
-          valueFrom:
-            secretKeyRef:
-              name: infisical-secret
-              key: infisical_id
         volumeMounts:
           - mountPath: /var/run/dagger
             name: dagger-socket
-      volumes:
-        - name: dagger-socket
-          hostPath:
-           path: /var/run/dagger

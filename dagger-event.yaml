@@ -44,7 +44,7 @@ spec:
       active: true
       contentType: json
       filter:
-        expression: "(null != body.head_commit) && (indexOf(body.head_commit.message, '#NORUN') == -1) && hasPrefix(body.pusher.name, 'NunoFrRibeiro') && hasPrefix(body.ref, 'refs/heads/kcd-porto')"
+        expression: "(null != body.head_commit) && (indexOf(body.head_commit.message, '#NORUN') == -1) && hasPrefix(body.pusher.name, 'NunoFrRibeiro') && hasPrefix(body.ref, 'refs/heads/main')"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor

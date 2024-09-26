@@ -49,7 +49,7 @@ func (c *Kcd) KNS() *dagger.Container {
 	return dag.K3S(c.Name).Kns().Terminal()
 }
 
-func (c *Kcd) DemoStart(
+func (c *Kcd) TestWF(
 	ctx context.Context,
 	// Auth Client Id to fetch credentials
 	// +required
@@ -68,9 +68,6 @@ func (c *Kcd) DemoStart(
 	daggerCloud := dag.Infisical(authClientId, authClientSecret).
 		GetSecret("DAGGER_CLOUD", "495b60ca-a6c5-46e9-bc08-6e37b1d715de", "dev")
 
-	ngrokAuth := dag.Infisical(authClientId, authClientSecret).
-		GetSecret("NGROK_AUTH", "495b60ca-a6c5-46e9-bc08-6e37b1d715de", "dev")
-
 	return dag.Container().From("bitnami/kubectl:1.31.0-debian-12-r4").
 		WithUser("root").
 		WithFile("/.kube/config", kubeConfig).
@@ -83,7 +80,6 @@ func (c *Kcd) DemoStart(
 		}).
 		WithDirectory("/demo", c.Source).
 		WithSecretVariable("DAGGER_CLOUD", daggerCloud).
-		WithSecretVariable("NGROK_AUTH", ngrokAuth).
 		WithExec([]string{
 			"bash",
 			"-c",
@@ -107,27 +103,12 @@ func (c *Kcd) DemoStart(
 		WithExec([]string{
 			"bash",
 			"-c",
-			"helm upgrade --install argo-events argo/argo-events --namespace argo --create-namespace --values=/demo/values/argo-events.yaml --wait",
-		}).
-		WithExec([]string{
-			"bash",
-			"-c",
-			"curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && echo \"deb https://ngrok-agent.s3.amazonaws.com buster main\" | tee /etc/apt/sources.list.d/ngrok.list && apt update && apt install ngrok",
-		}).
-		WithExec([]string{
-			"bash",
-			"-c",
 			"kubectl create secret generic -n argo dagger-cloud --from-literal=token=$DAGGER_CLOUD",
 		}).
 		WithExec([]string{
 			"bash",
 			"-c",
-			"ngrok config add-authtoken $NGROK_AUTH",
-		}).
-		WithExec([]string{
-			"bash",
-			"-c",
 			"kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:dagger-workflow",
-			"kubectl create -f /demo/dagger-workflow.yaml",
+			"kubectl create -f /demo/dagger-test-workflow.yaml",
 		}), nil
 }

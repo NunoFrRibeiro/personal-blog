@@ -10,4 +10,4 @@ MetaOgURL: https://blog.nfribeiro.com/hello-devops-days
 ---
 ## HELLO DEVOPSDAYS PORTO
 
-![](./assets/6c0.png)
+![](../static/images/6c0.png)
