@@ -96,29 +96,3 @@ spec:
   ports:
   - port: 12000
     targetPort: 12000
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: dagger-es-ing
-  namespace: argo
-  labels:
-    app: dagger-wf
-    name: dagger-event-source
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: argoev.nfribeiro.com
-    http:
-      paths:
-      - path: /push
-        pathType: Prefix
-        backend:
-          service:
-            name: dagger-es-svc
-            port:
-              number: 12000
-  tls:
-  - hosts:
-    - argoev.nfribeiro.com
-    secretName: argoworkflows-tls
