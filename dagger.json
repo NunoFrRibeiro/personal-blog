@@ -15,6 +15,10 @@
       "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37"
     },
     {
+      "name": "infisical",
+      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37"
+    },
+    {
       "name": "proxy",
       "source": "github.com/kpenfound/dagger-modules/proxy@beaf4600637b3f492cd3e1e1598ef799d8cd3164"
     }
