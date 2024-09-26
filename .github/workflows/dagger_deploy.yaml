@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 env:
-  DAGGER_VERSION: 0.13.0
+  DAGGER_VERSION: 0.13.3
 
 jobs:
   ci:
@@ -27,4 +27,4 @@ jobs:
           version: ${{ env.DAGGER_VERSION }}
         env:
           INFISICAL_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
-          INFISICAL_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          INFISICAL_SCRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}

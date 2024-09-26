@@ -1,0 +1,98 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: dagger-eb
+  namespace: argo
+spec:
+  nats:
+    native: {}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: dagger-event-source
+  namespace: argo
+  labels:
+    app: dagger-wf
+    name: dagger-event-source
+spec:
+  eventBusName: dagger-eb
+  template:
+    metadata:
+      name: dagger-es-po
+    serviceAccountName: dagger-workflow
+  github:
+    dagger-push:
+      repositories:
+        - owner: NunoFrRibeiro
+          names:
+           - personal-blog
+      webhook:
+        endpoint: /push
+        port: "12000"
+        method: POST
+        url: https://argoev.nfribeiro.com
+      events:
+        - push
+      webhookSecret:
+        name: github-secret
+        key: github-webhook-secret
+      apiToken:
+        name: github
+        key: token
+      insecure: false
+      active: true
+      contentType: json
+      filter:
+        expression: "(null != body.head_commit) && (indexOf(body.head_commit.message, '#NORUN') == -1) && hasPrefix(body.pusher.name, 'NunoFrRibeiro') && hasPrefix(body.ref, 'refs/heads/kcd-porto')"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: dagger-push-sensor
+  namespace: argo
+spec:
+  eventBusName: dagger-eb
+  template:
+    metadata:
+      name: dagger-sn-po
+    serviceAccountName: dagger-workflow-sa
+  dependencies:
+    - name: dagger-push
+      eventSourceName: dagger-event-source
+      eventName: dagger-push
+  triggers:
+    - template:
+        name: github-push-trigger
+        argoWorkflow:
+          group: argoproj.io
+          version: v1alpha1
+          resource: workflows
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: kcd-demo- 
+              spec:
+                serviceAccountName: dagger-workflow
+                workflowTemplateRef:
+                  name: kcd-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dagger-es-svc
+  namespace: argo
+  labels:
+    app: dagger-wf
+    name: dagger-event-source
+spec:
+  type: ClusterIP
+  selector:
+    eventsource-name: dagger-event-source
+    owner-name: dagger-event-source
+  ports:
+  - port: 12000
+    targetPort: 12000

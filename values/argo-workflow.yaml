@@ -1,0 +1,32 @@
+server:
+  authModes:
+    - server
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - argo.nfribeiro.com
+    paths:
+      - /
+    pathType: Prefix
+    tls:
+      - secretName: argoworkflows-tls
+        hosts:
+          - nfribeiro.com
+controller:
+  securityContext:
+    allowPrivilegeEscalation: true
+    capabilities:
+      add:
+        - ALL
+  workflowNamespaces:
+    - argo
+  workflowDefaults:
+    spec:
+       serviceAccountName: dagger-workflow
+workflow:
+  serviceAccount:
+    create: true
+    name: "dagger-workflow"
+  rbac:
+    create: true

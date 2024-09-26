@@ -20,5 +20,5 @@
 
 # Go workspace file
 go.work
-KCD/*
-talos/*
+go.work.sum
+talos/
