@@ -28,7 +28,7 @@ spec:
       container:
         image: alpine:latest
         command: ["sh", "-c"]
-        args: ["dagger call -m KCD test-wf up"]
+        args: ["dagger call test-result"]
         workingDir: /work
         env:
         - name: "_EXPERIMENTAL_DAGGER_RUNNER_HOST"
