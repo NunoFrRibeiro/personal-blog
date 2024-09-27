@@ -121,7 +121,26 @@ func (g *Goblog) Deploy(
 	return fmt.Sprintf("Blog deployed to Fly.io %s", result), nil
 }
 
-func  (g *Goblog) TestDeploy (
+func (g *Goblog) TestResult (
+  ctx context.Context,
+) (string, error) {
+
+  lintResult, err := g.Lint(ctx)
+  if err != nil {
+    return "", err
+  }
+
+  testResult, err := g.RunUnitTests(ctx)
+  if err != nil {
+    return "", err
+  }
+
+  result := lintResult + "\n" + testResult
+
+  return result, nil
+}
+
+func (g *Goblog) TestDeploy (
   ctx context.Context,
 ) (*dagger.Service, error){
 

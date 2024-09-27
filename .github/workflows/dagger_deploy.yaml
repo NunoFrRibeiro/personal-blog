@@ -23,7 +23,7 @@ jobs:
         with:
           verb: call
           # args:  --ref ${{ github.ref }} run-all --infisical-project 495b60ca-a6c5-46e9-bc08-6e37b1d715de --infisical-client-id env:INFISICAL_ID --infisical-client-secret env:INFISICAL_SECRET
-          args:  --ref ${{ github.ref }} lint
+          args:  --ref ${{ github.ref }} test-result
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
           version: ${{ env.DAGGER_VERSION }}
         env:

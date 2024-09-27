@@ -18,7 +18,10 @@ func (b *Backend) RunUnitTests(
 ) (string, error) {
 	return dag.Golang().
 		WithProject(dir).
-		Test(ctx)
+		Test(ctx, dagger.GolangTestOpts{
+      Source: dir,
+      Args: []string{"./..."},
+    })
 }
 
 // Lint the project

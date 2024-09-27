@@ -95,23 +95,31 @@ func (c *Kcd) TestWF(
 		WithExec([]string{
 			"bash",
 			"-c",
-			"helm upgrade --install --namespace=dagger --create-namespace dagger oci://registry.dagger.io/dagger-helm",
+			"helm upgrade --install --namespace=dagger --create-namespace dagger oci://registry.dagger.io/dagger-helm --wait",
 		}).
 		WithExec([]string{
 			"bash",
 			"-c",
-			"helm upgrade --install argo-wf argo/argo-workflows --namespace argo --create-namespace --values=/demo/values/argo-workflow.yaml",
+			"helm upgrade --install argo-wf argo/argo-workflows --namespace argo --create-namespace --values=/demo/values/argo-workflow.yaml --wait",
 		}).
 		WithExec([]string{
 			"bash",
 			"-c",
 			"kubectl create secret generic -n argo dagger-cloud --from-literal=token=$DAGGER_CLOUD",
-			"kubectl create secret generic -n argo infisical-secret -from-literal=infisical_secret=$INFISICAL_SECRET --from-literal=infisical_id=$INFISICAL_ID",
+		}).
+		WithExec([]string{
+			"bash",
+			"-c",
+			"kubectl create secret generic -n argo infisical-secret --from-literal=infisical_secret=$INFISICAL_SECRET --from-literal=infisical_id=$INFISICAL_ID",
 		}).
 		WithExec([]string{
 			"bash",
 			"-c",
 			"kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:dagger-workflow",
+		}).
+		WithExec([]string{
+			"bash",
+			"-c",
 			"kubectl create -f /demo/dagger-test-workflow.yaml",
 		}), nil
 }
