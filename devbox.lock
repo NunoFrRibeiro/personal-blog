@@ -241,6 +241,14 @@
         }
       }
     },
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2025-09-16T13:27:06Z",
+      "resolved": "github:NixOS/nixpkgs/08b8f92ac6354983f5382124fef6006cade4a1c1?lastModified=1758029226&narHash=sha256-TjqVmbpoCqWywY9xIZLTf6ANFvDCXdctCjoYuYPYdMI%3D"
+    },
+    "github:dagger/nix/864c3777e6036d2fcd6a0bec3d9cf26d731d2cf0#packages.x86_64-linux.dagger": {
+      "last_modified": "1970-01-01T00:00:00Z",
+      "resolved": "github:dagger/nix/864c3777e6036d2fcd6a0bec3d9cf26d731d2cf0#packages.x86_64-linux.dagger"
+    },
     "go@1.23.0": {
       "last_modified": "2024-08-31T10:12:23Z",
       "resolved": "github:NixOS/nixpkgs/5629520edecb69630a3f4d17d3d33fc96c13f6fe#go_1_23",
