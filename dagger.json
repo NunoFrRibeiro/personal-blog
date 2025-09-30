@@ -1,6 +1,9 @@
 {
   "name": "goblog",
-  "sdk": "go",
+  "engineVersion": "v0.18.19",
+  "sdk": {
+    "source": "go"
+  },
   "dependencies": [
     {
       "name": "backend",
@@ -8,17 +11,19 @@
     },
     {
       "name": "flyio",
-      "source": "github.com/NunoFrRibeiro/daggerverse/fly@4fa303bebcf3544dc2428f27141565230ca99885"
+      "source": "github.com/NunoFrRibeiro/daggerverse/fly@4fa303bebcf3544dc2428f27141565230ca99885",
+      "pin": "4fa303bebcf3544dc2428f27141565230ca99885"
     },
     {
       "name": "infisical",
-      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37"
+      "source": "github.com/NunoFrRibeiro/daggerverse/infisical@b513c4b32694a85d0e085b92baf818102d3afb37",
+      "pin": "b513c4b32694a85d0e085b92baf818102d3afb37"
     },
     {
       "name": "proxy",
-      "source": "github.com/kpenfound/dagger-modules/proxy@beaf4600637b3f492cd3e1e1598ef799d8cd3164"
+      "source": "github.com/kpenfound/dagger-modules/proxy@beaf4600637b3f492cd3e1e1598ef799d8cd3164",
+      "pin": "beaf4600637b3f492cd3e1e1598ef799d8cd3164"
     }
   ],
-  "source": "ci",
-  "engineVersion": "v0.13.3"
+  "source": "ci"
 }
